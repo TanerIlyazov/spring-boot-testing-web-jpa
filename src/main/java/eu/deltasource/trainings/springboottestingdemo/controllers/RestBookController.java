@@ -5,10 +5,13 @@ import eu.deltasource.trainings.springboottestingdemo.exceptions.InvalidArgument
 import eu.deltasource.trainings.springboottestingdemo.model.Book;
 import eu.deltasource.trainings.springboottestingdemo.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,8 +19,10 @@ import java.util.Optional;
 /**
  * Created by Taner - Delta Source Bulgaria on 22.04.21.
  */
+@Slf4j
 @RequiredArgsConstructor
-@RestController("/books")
+@RestController
+@RequestMapping("/books")
 public class RestBookController {
 
     private final BookRepository bookRepository;
@@ -27,7 +32,7 @@ public class RestBookController {
         return bookRepository.getBooks();
     }
 
-    @GetMapping(params = "name")
+    @GetMapping(params = "bookName")
     public Book getBookByName(@RequestParam String bookName) {
         if (Objects.isNull(bookName) || bookName.trim().isEmpty()) {
             throw new InvalidArgumentGivenException("Invalid book name");
