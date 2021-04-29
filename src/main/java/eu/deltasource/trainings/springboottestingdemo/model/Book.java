@@ -1,27 +1,43 @@
 package eu.deltasource.trainings.springboottestingdemo.model;
 
 import eu.deltasource.trainings.springboottestingdemo.exceptions.InvalidArgumentGivenException;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by Taner - Delta Source Bulgaria on 22.04.21.
  */
+@Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
-    private List<String> tags;
+    private String[] tags;
 
-    public static Book newBook(String bookName, String... tags) {
-        if (invalidBookParameters(bookName, tags)) {
+    public Book(String name, String ...tags) {
+        if (invalidBookParameters(name, tags)) {
             throw new InvalidArgumentGivenException("Invalid parameters for instantiating book");
         }
-        return new Book(bookName, Arrays.asList(tags));
+        this.name = name;
+        this.tags = tags;
+    }
+
+    public Book(Long id, String name, String ...tags) {
+        if (invalidBookParameters(name, tags)) {
+            throw new InvalidArgumentGivenException("Invalid parameters for instantiating book");
+        }
+        this.id = id;
+        this.name = name;
+        this.tags = tags;
     }
 
     private static boolean invalidBookParameters(String bookName, String[] tags) {

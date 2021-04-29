@@ -6,6 +6,7 @@ import eu.deltasource.trainings.springboottestingdemo.model.Book;
 import eu.deltasource.trainings.springboottestingdemo.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class RestBookController {
 
     @GetMapping
     public List<Book> getAllBooks() {
-        return bookRepository.getBooks();
+        return bookRepository.findAll();
     }
 
     @GetMapping(params = "bookName")
@@ -37,7 +38,7 @@ public class RestBookController {
         if (Objects.isNull(bookName) || bookName.trim().isEmpty()) {
             throw new InvalidArgumentGivenException("Invalid book name");
         }
-        Optional<Book> optionalBook = bookRepository.getBooks()
+        Optional<Book> optionalBook = bookRepository.findAll()
                 .stream()
                 .filter(book -> book.getName().equalsIgnoreCase(bookName))
                 .findFirst();
@@ -50,7 +51,7 @@ public class RestBookController {
         if (Objects.isNull(pattern) || pattern.trim().isEmpty()) {
             throw new InvalidArgumentGivenException("Invalid book name");
         }
-        Optional<String> optionalBook = bookRepository.getBooks()
+        Optional<String> optionalBook = bookRepository.findAll()
                 .stream()
                 .map(Book::getName)
                 .filter(bookName -> bookName.contains(pattern))
